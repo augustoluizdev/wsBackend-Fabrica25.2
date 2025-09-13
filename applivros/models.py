@@ -11,7 +11,7 @@ class Livro(models.Model):
     isbn = models.CharField(max_length=13, unique=True)
 
     def __str__(self):
-        return f"{self.titulo}-{self.autor}"
+        return f"{self.titulo} ({self.autor})"
     
 class LivroFavorito(models.Model):
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
