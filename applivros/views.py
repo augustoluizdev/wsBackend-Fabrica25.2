@@ -20,7 +20,7 @@ def criar_pessoa(request):
     if request.method == "POST":
         form = PessoaForm(request.POST)
         if form.is_valid():
-            pessoas = form.save()
+            pessoa = form.save()
             request.session['pessoa_id'] = pessoa.id
             return redirect('listar_livros_favoritos')
     return render(request, 'pessoas/criar_pessoa.html', {'form': form, 'pessoas': pessoas, 'pessoa_ativa': get_pessoa(request)})    
