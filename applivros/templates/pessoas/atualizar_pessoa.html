@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Pessoa</title>
+</head>
+<body>
+    <h2>Editar Usuário: {{ pessoa.nome }}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{% url 'criar_pessoa' pessoa.id %}">Voltar</a>
+</body>
+</html>

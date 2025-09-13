@@ -45,7 +45,7 @@ def deletar_pessoa(request, pessoa_id):
     if request.method == "POST":
         pessoa.delete()
         return redirect('criar_pessoa')
-    return render(request, 'confirmar_delete.html', {'pessoa':pessoa})
+    return render(request, 'confirmar_delete_pessoa.html', {'pessoa':pessoa})
 
 
 def buscar_livro(isbn):
@@ -79,12 +79,12 @@ def adicionar_livro(request):
                 messages.error(request, "Livro não encontrado!")
     else:
         form = LivroForm()    
-    return render(request, 'livros/adicionar_livros.html', {'form':form})
+    return render(request, 'livros/adicionar_livro.html', {'form':form})
 
 def checar_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id) 
     ja_favorito = LivroFavorito.object.filter(usuario=request.user, livro=livro).exists()
-    return render(request, 'livro/checar_livro.html', {'livro':livro, 'ja_favorito':ja_favorito})
+    return render(request, 'livros/checar_livro.html', {'livro':livro, 'ja_favorito':ja_favorito})
 
 def favoritar_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id)

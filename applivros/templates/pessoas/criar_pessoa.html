@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Pessoa</title>
+</head>
+<body>
+    <h1>Cadastrar Pessoa</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+    <br>
+    <h2>Usuários Existentes</h2>
+    <ul>
+        {% for pessoa in pessoas %}
+          <li>
+            {% if pessoa_ativa and pessoa.id == pessoa_ativa.id %}
+            <strong>Ativo</strong>
+            {% endif %}
+            {{ pessoa.nome }}
+            <a href="{% url 'salvar_pessoa' pessoa.id %}">Selecionar </a>
+            <a href="{% url 'atualizar_pessoa' pessoa.id %}"> Editar </a>
+            <a href="{% url 'deletar_pessoa' pessoa.id %}"> Deletar</a>
+          </li>
+        {% empty %}
+        <li>Nenhum usuário criado ainda.</li>
+        {% endfor %}  
+    </ul>
+
+</body>
+</html>
