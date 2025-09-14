@@ -6,13 +6,16 @@
     <title>Checar Livro</title>
 </head>
 <body>
-    <h2>{{ livro.titulo }}</h2>
+    {% block content %}
+    <h2>{{ livro.titulo }} - {{ livro.autor }}</h2>
     <p>ISBN: {{ livro.isbn }}</p>
-
-    {% if not ja_favorito %}
-    <a href="{% url 'favoritar_livro' livro.id %}">Favoritar</a>
+    {% if ja_favorito %}
+        <p>Este livro já está nos favoritos.</p>
     {% else %}
-    <p>Você já favoritou esse livro!</p>
+        <a href="{% url 'favoritar_livro' livro.id %}">Adicionar aos favoritos</a>
     {% endif %}
-</body>
+    <a href="{% url 'listar_livros_favoritos' %}">Ver favoritos</a>
+    <a href="{% url 'adicionar_livro' %}">Adicionar outro livro</a>
+    {% endblock %}
+    </body>
 </html>

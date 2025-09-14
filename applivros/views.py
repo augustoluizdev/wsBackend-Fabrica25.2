@@ -38,62 +38,68 @@ def atualizar_pessoa(request, pessoa_id):
             return redirect('criar_pessoa')
     else:
         form = PessoaForm(instance=pessoa)
-    return render(request, 'pessoas/atualizar_pessoa')  
+    return render(request, 'pessoas/atualizar_pessoa.html', {'form': form, 'pessoa': pessoa})  
 
 def deletar_pessoa(request, pessoa_id):
-    pessoa = get_object_or_404(pessoa, id=pessoa_id)
+    pessoa = get_object_or_404(Pessoa, id=pessoa_id)
     if request.method == "POST":
         pessoa.delete()
         return redirect('criar_pessoa')
-    return render(request, 'confirmar_delete_pessoa.html', {'pessoa':pessoa})
+    return render(request, 'pessoas/confirmar_delete.html', {'pessoa':pessoa})
 
 
 def buscar_livro(isbn):
     url = f"https://openlibrary.org/isbn/{isbn}.json"
     response = requests.get(url)
-
     if response.status_code == 200:
         dados = response.json()
         titulo = dados.get('title', 'Sem título')
         autores = dados.get('authors', [])
         autor_nome = "Desconhecido"
-
         if autores:
             autor_data = requests.get(f"https://openlibrary.org{autores[0]['key']}.json")
             if autor_data.status_code == 200:
                 autor_nome = autor_data.json().get('name', "Desconhecido")
-
-        return {'titulo':titulo, 'autor':autor_nome, 'isbn':isbn}
+        return {'titulo': titulo, 'autor': autor_nome, 'isbn': isbn}
     return None
 
 def adicionar_livro(request):
-    if request.method == "POST":
-        form = LivroForm(request.POST)
-        if form.is_valid:
-            isbn = form.changed_data['isbn']
-            dados = buscar_livro(isbn)
-            if dados:
-                livro, _ = Livro.objects.get_or_create(isbn=isbn, defaults={'titulos':dados['titulo'], 'autor':dados['autor'], })
-                return redirect('detalhe_livro', livro.id)
-            else:
-                messages.error(request, "Livro não encontrado!")
-    else:
-        form = LivroForm()    
-    return render(request, 'livros/adicionar_livro.html', {'form':form})
+    form = LivroForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        isbn = form.cleaned_data['isbn']
+        dados = buscar_livro(isbn)
+        if dados:
+            livro, _ = Livro.objects.get_or_create(
+                isbn=isbn,
+                defaults={'titulo': dados['titulo'], 'autor': dados['autor']}
+            )
+            return redirect('checar_livro', livro.id)
+        else:
+            messages.error(request, "Livro não encontrado!")
+    return render(request, 'livros/adicionar_livro.html', {'form': form})
 
 def checar_livro(request, livro_id):
-    livro = get_object_or_404(Livro, id=livro_id) 
-    ja_favorito = LivroFavorito.object.filter(usuario=request.user, livro=livro).exists()
-    return render(request, 'livros/checar_livro.html', {'livro':livro, 'ja_favorito':ja_favorito})
+    livro = get_object_or_404(Livro, id=livro_id)
+    pessoa = get_pessoa(request)  # pega a pessoa da sessão
+    if not pessoa:
+        return redirect('criar_pessoa')
+
+    ja_favorito = LivroFavorito.objects.filter(pessoa=pessoa, livro=livro).exists()
+    return render(request, 'livros/checar_livro.html', {'livro': livro, 'ja_favorito': ja_favorito})
 
 def favoritar_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id)
-    LivroFavorito.objects.get_or_create(usuario=request.user, livro=livro)
+    pessoa = get_pessoa(request)
+    if not pessoa:
+        return redirect('criar_pessoa')
+
+    LivroFavorito.objects.get_or_create(pessoa=pessoa, livro=livro)
     return redirect('checar_livro', livro_id)
 
 def listar_favoritos(request):
     pessoa = get_pessoa(request)
     if not pessoa:
         return redirect('criar_pessoa')
-    favoritos = LivroFavorito.objects.filter(usuario=request.user).select_related('livro')
-    return render(request, 'livros/favoritos.html', {'favoritos':favoritos, 'pessoa':pessoa})
+    
+    favoritos = LivroFavorito.objects.filter(pessoa=pessoa).select_related('livro')
+    return render(request, 'livros/favoritos.html', {'favoritos': favoritos, 'pessoa': pessoa})

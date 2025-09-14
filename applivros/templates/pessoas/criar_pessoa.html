@@ -21,7 +21,6 @@
             <strong>Ativo</strong>
             {% endif %}
             {{ pessoa.nome }}
-            <a href="{% url 'salvar_pessoa' pessoa.id %}">Selecionar </a>
             <a href="{% url 'atualizar_pessoa' pessoa.id %}"> Editar </a>
             <a href="{% url 'deletar_pessoa' pessoa.id %}"> Deletar</a>
           </li>

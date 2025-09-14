@@ -6,12 +6,20 @@
     <title>Adicionar Livro</title>
 </head>
 <body>
-    <h2>Adicionar Livro por isbn:<h2>
+    {% block content %}
+    <h2>Adicionar Livro</h2>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Salvar</button>
+        <button type="submit">Buscar / Adicionar</button>
     </form>
-    <button type="submit">Buscar</a>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endblock %}
 </body>
 </html>

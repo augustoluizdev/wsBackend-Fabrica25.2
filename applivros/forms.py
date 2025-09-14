@@ -1,12 +1,10 @@
 from django import forms
-from .models import Livro, Pessoa
-
-class LivroForm(forms.ModelForm):
-    class Meta:
-        model = Livro
-        fields = ['titulo', 'autor', 'isbn']
+from .models import Pessoa, Livro
 
 class PessoaForm(forms.ModelForm):
     class Meta:
         model = Pessoa
-        fields = ['nome', 'idade', 'email']        
+        fields = ['nome', 'idade', 'email']
+
+class LivroForm(forms.Form):
+    isbn = forms.CharField(label='ISBN', max_length=13)
