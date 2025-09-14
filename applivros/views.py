@@ -80,7 +80,7 @@ def adicionar_livro(request):
 
 def checar_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id)
-    pessoa = get_pessoa(request)  # pega a pessoa da sessão
+    pessoa = get_pessoa(request) 
     if not pessoa:
         return redirect('criar_pessoa')
 

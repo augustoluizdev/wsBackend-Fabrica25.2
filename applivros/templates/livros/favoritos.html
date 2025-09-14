@@ -1,18 +1,23 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Favoritos</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Checar Livro</title>
 </head>
 <body>
-    <h2>Meus Livros Favoritos</h2>
-    <ul>
-        {% for fav in favoritos %}
-        <li>{{ fav.livro.titulo }}-{{ fav.livro.autor }}</li>
-        {% empty %}
-        <li>Nenhum livro adicionado ainda.</li> 
-        {% endfor %}
-    </ul>
-</body>
+    {% block content %}
+    <h3>{{ livro.titulo }} - {{ livro.autor }}</h3>
+    <p>ISBN: {{ livro.isbn }}</p>
+    {% if ja_favorito %}
+        <p>Este livro já está nos favoritos.</p>
+    {% else %}
+        <a href="{% url 'favoritar_livro' livro.id %}"><button type="submit">Adicionar aos favoritos</button></a>
+    {% endif %}
+    <a href="{% url 'listar_livros_favoritos' %}"><button type="submit">Ver favoritos</button></a>
+    <a href="{% url 'adicionar_livro' %}"><button type="submit">Adicionar outro livro</button></a>
+    <a href="{% url 'criar_pessoa' %}"><button type="submit">Adicionar perfil</button></a>
+    {% endblock %}
+    </body>
 </html>
