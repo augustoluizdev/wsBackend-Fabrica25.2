@@ -6,6 +6,13 @@
     <title>Checar Livro</title>
 </head>
 <body>
+    <h2>{{ livro.titulo }}</h2>
+    <p>ISBN: {{ livro.isbn }}</p>
 
+    {% if not ja_favorito %}
+    <a href="{% url 'favoritar_livro' livro.id %}">Favoritar</a>
+    {% else %}
+    <p>Você já favoritou esse livro!</p>
+    {% endif %}
 </body>
 </html>

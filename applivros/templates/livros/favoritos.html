@@ -6,6 +6,13 @@
     <title>Favoritos</title>
 </head>
 <body>
-    
+    <h2>Meus Livros Favoritos</h2>
+    <ul>
+        {% for fav in favoritos %}
+        <li>{{ fav.livro.titulo }}-{{ fav.livro.autor }}</li>
+        {% empty %}
+        <li>Nenhum livro adicionado ainda.</li> 
+        {% endfor %}
+    </ul>
 </body>
 </html>

@@ -70,7 +70,7 @@ def adicionar_livro(request):
     if request.method == "POST":
         form = LivroForm(request.POST)
         if form.is_valid:
-            isbn = form.cleaned_data['isbn']
+            isbn = form.changed_data['isbn']
             dados = buscar_livro(isbn)
             if dados:
                 livro, _ = Livro.objects.get_or_create(isbn=isbn, defaults={'titulos':dados['titulo'], 'autor':dados['autor'], })

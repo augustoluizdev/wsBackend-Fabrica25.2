@@ -8,7 +8,7 @@ class Pessoa(models.Model):
 class Livro(models.Model):
     titulo = models.CharField(max_length=255)
     autor = models.CharField(max_length=255)
-    isbn = models.CharField(max_length=13, unique=True)
+    isbn = models.IntegerField(max_length=13, unique=True)
 
     def __str__(self):
         return f"{self.titulo} ({self.autor})"
