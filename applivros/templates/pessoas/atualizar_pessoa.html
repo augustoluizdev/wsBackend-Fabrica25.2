@@ -7,7 +7,7 @@
     <title>Atualizar Pessoa</title>
 </head>
 <body>
-    <h3>Editar Usuário: {{ pessoa.nome }}</h3>
+    <h2>Editar Usuário: {{ pessoa.nome }}</h2>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
